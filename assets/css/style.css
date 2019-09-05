@@ -1,0 +1,13 @@
+body {
+  background-image: url('../images/ep_naturalblack.png');
+  min-height: 100vh;
+}
+
+.container {
+  height: 75%;
+  border-radius: 6px;
+}
+
+img {
+  width: 50%;
+}

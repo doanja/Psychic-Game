@@ -13,31 +13,24 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container bg-light mt-5 p-5">
         <h1 class="text-center">Hangman</h1>
         <hr>
+        <div class="alert alert-success">Press any key to get started!</div>
         <div class="row">
             <div class="col-sm-12 col-md-6">
-                <img src="https://gamesrob.com/res/hangman.png" alt="hangman">
+                <img src="https://lh3.googleusercontent.com/Jx2nAZ3cmGYoqr-oM7_FBCqWT3tCBHIR5GFhMXc5Lsz_uPa9APeVsBS3A-mH_HuHOy4dkCwNIH5AB1l5RN8bGhOxizQXlhJRShX7stMVrgUrvwuPtdVD8D1X-42XZBBAFOMsM8hYDITe1-a2nGVECVO43nu8PDE7WAOxkz0mmvibh37vlcv3unZTB6y4JkTz6LkqPSs1P1SVoOIswkY7kXJY0rL_4oxoThbPGCI5hTqZhkUCpi3mwQEFBWCf_oBrDCHOmlhVcSw61HnCloKCEHzhRZ0IJ9tGtk7BgDo-UFId9DrWDfMpzOZTqVhHAUUzFC9Qy5WyEd1yWJVHn8F4Q_Ehse0hcQlm6PcVijgYjlbid_ZgkudplEs2Kz1IlWa1kAvx3uz-w6-lubmHm68An8u4ZCv5sykhVdhNjjkwUYEVp_ZnuTRljssn4nwHTdTlziRxBRBYzB3QYo9nsjs2EXGCUI0dFKBte_SOQetcYk4J5DDaGME9dj-L2HN_Ppa7YaoIZnrZjSJAATVHPWG_9S3d-yEBeKBM329iB9FuIfcjKjdsTNstIO6EKS-FCpEebb3ndoxXaE3R8kYns0zp4SwuaRf5ZmzHH7lt5O9siPMv7ao1cxLuGrzLJyYlUjfA4H2N8GjNgugykuRCDeRNz7ARdsVS5b_kqrcY4ztaIk3_HdzIKkWeseI=w938-h969-no"
+                    alt="hangman">
             </div>
             <div class="col-sm-12 col-md-6">
-                <img src="https://picsum.photos/500/300" alt="keyboard">
+                <div id="currentWordText" class="alert alert-dark">Current Word:</div>
+                <div id="guessedLettersText" class="alert alert-warning">Guessed Letters: </div>
+                <div id="livesText" class="alert alert-danger">Lives: </div>
+                <div id="winsText" class="alert alert-primary">Wins: </div>
             </div>
         </div>
         <hr>
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <button id="startButton" class="btn btn-primary">Start Game</button>
-                <button id="restartButton" class="btn btn-primary">Restart Game</button>
-            </div>
-            <div class="col-sm-12 col-md-3">
-                <div id="guessedLettersText" class="alert alert-warning">Guessed Letters: </div>
-            </div>
-            <div class="col-sm-12 col-md-3">
-                <div id="livesText" class="alert alert-danger">Lives: </div>
-            </div>
-        </div>
-
+        <button id="restartButton" class="btn btn-danger">Restart Game (I'm bad)</button>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
