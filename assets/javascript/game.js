@@ -72,12 +72,37 @@ window.onload = () => {
 };
 /*
  * @param arr, the array to be checked
- * @param letter, the letter we are checking for
+ * @param letter, the letter the function is checking for
  * @return returns true if letter was found in array, otherwise false
  * checks an array for a letter
  */
 const checkArrLetter = (arr, letter) => {
   return arr.includes(letter);
+};
+
+/*
+ * @param letter, the letter the function is checking for
+ * function to update guessedLetters model and view
+ */
+const updateGuessedLetters = letter => {
+  guessedLetters.push(letter); // add to guessedLetters
+  guessedLettersText.textContent += letter + ' '; // update guessedLettersText with keyPressed
+};
+
+/*
+ * @param dictionary, the object to check
+ * @param letter, the letter the function is checking for
+ * function to check if letter exists in the dictionary
+ */
+const checkDictionary = letter => {
+  for (let i = 0; i < Object.values(dictionary).length; i++) {
+    if (dictionary[i][1] === letter) {
+      return true;
+    }
+    return false;
+    // console.log('checkDictionary:', dictionary[i][1] === letter);
+    // return dictionary[i][1] === letter;
+  }
 };
 
 /*
@@ -89,11 +114,14 @@ document.onkeyup = e => {
 
   // checks to see if keyPressed is a valid letter in letterbank
   if (checkArrLetter(letterBank, keyPressed)) {
-    // keyPressed does not exist in guessedLetters AND keyPressed matches a letter in the currentWord
-    if (!checkArrLetter(guessedLetters, keyPressed)) {
-      console.log(keyPressed);
-      guessedLetters.push(keyPressed); // add to guessedLetters
-      guessedLettersText.textContent += keyPressed + ' '; // update guessedLettersText with keyPressed
+    // when the keyPressed wasn't already guessed AND keyPressed matches a letter in the currentWord
+    if (
+      !checkArrLetter(guessedLetters, keyPressed) &&
+      checkDictionary(keyPressed)
+    ) {
+      console.log('case 1');
+      //   console.log(keyPressed);
+      updateGuessedLetters(keyPressed); // add the guessed letter to the array
 
       // loop through each character form currentWord
       for (let i = 0; i < currentWord.length; i++) {
@@ -101,6 +129,7 @@ document.onkeyup = e => {
         if (dictionary[i][0] === keyPressed) {
           dictionary[i][1] = keyPressed; // set the second value of the key from ' _' to keyPressed
           currentWordText.textContent = 'Current Word: '; // clears currentWordText
+
           // loop through each character of currentWord
           for (let j = 0; j < currentWord.length; j++) {
             currentWordText.textContent += dictionary[j][1]; // update the currentWordText with the keyPressed
@@ -113,11 +142,18 @@ document.onkeyup = e => {
 
     // keyPressed already exist in guessedLetters
     else if (checkArrLetter(guessedLetters, keyPressed)) {
-      console.log('letter has been guessed already');
+      console.log('case 2');
+      alert(
+        'The letter has been guessed already. Try again with a different letter.'
+      );
     }
 
     // keyPressed does not exist in guessedLetter AND keyPressed DOES NOT match a letter in the currentWord
     else {
+      console.log('case 3');
+
+      updateGuessedLetters(keyPressed); // add the guessed letter to the array
+
       lives--; // decrement lives
       livesText.textContent = 'Lives: ' + lives; // update livesText
 
@@ -131,6 +167,7 @@ document.onkeyup = e => {
 
 // function called when 'Restart Game' is pressed or when the webpage is loaded
 const initializeGame = () => {
+  console.log('GAME HAS RESTARTED');
   // initialize script variables
   //   numberOfGuesses = 0; // counter for number of guesses
   lives = 2; // counter for lives, used to determine how many chances the player has get before a gameover
@@ -143,10 +180,10 @@ const initializeGame = () => {
   // update html elements
   currentWordText.textContent = 'Current Word: '; // resets currentWordText
   for (let i = 0; i < currentWord.length; i++) {
-    dictionary[i] = [currentWord.charAt(i), ' _'];
-    currentWordText.textContent += dictionary[i][1];
+    dictionary[i] = [currentWord.charAt(i), ' _']; // model like: [id]:['a',' _']
+    currentWordText.textContent += dictionary[i][1]; // updates text content
   }
-  console.log(dictionary);
+  //   console.log(dictionary);
   guessedLettersText.textContent = 'Guessed Letters: ';
   livesText.textContent = 'Lives: 2';
   winsText.textContent = 'Wins: 0';
