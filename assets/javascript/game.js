@@ -1,5 +1,12 @@
 // counters used in script
-let lives, maxLives, wins, losts, currentWord, guessedLetters, dictionary;
+let lives,
+  maxLives,
+  wins,
+  losts,
+  currentWord,
+  guessedLetters,
+  dictionary,
+  copyWordBank;
 
 // references to HTML elements
 let currentWordText,
@@ -102,9 +109,12 @@ window.onload = () => {
   losts = 0;
   lostsText.textContent = 'Losts: 0';
 
+  copyWordBank = wordBank; // makes a copy of the wordBank used for modifying
+
   // initialize the game
   initializeGame();
 };
+
 /*
  * @param arr, the array to be checked
  * @param letter, the letter the function is checking for
@@ -265,9 +275,20 @@ const initializeGame = () => {
   lives = maxLives; // counter for lives, used to determine how many chances the player has get before a gameover
   guessedLetters = []; // array to keep track of each leter guessed
   dictionary = {}; // initialize empty object
-  currentWord = wordBank[Math.floor(Math.random() * wordBank.length)]; // retrieve a random word from the wordBank
-  numberOfGuesses = 0;
 
+  // check if copyWordBank is empty
+  if (copyWordBank.length === 0) {
+    document.location.reload();
+  } else {
+    currentWord = copyWordBank[Math.floor(Math.random() * wordBank.length)]; // retrieve a random word from the copyWordBank
+  }
+
+  // remove the currentWord from the copyWordBank
+  copyWordBank.splice(copyWordBank.indexOf(currentWord), 1);
+
+  console.log('array:', copyWordBank);
+
+  // initialize health bar to 100%
   healthBarInfill.style.width = Math.floor(lives / maxLives) * 100 + '%';
 
   console.log('currentWord:', currentWord);
