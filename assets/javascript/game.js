@@ -1,10 +1,5 @@
 // counters used in script
-let /*numberOfGuesses,*/ lives,
-  wins,
-  currentWord,
-  guessedLetters,
-  correctGuesses,
-  dictionary;
+let lives, wins, currentWord, guessedLetters, dictionary;
 
 // references to HTML elements
 let currentWordText, guessedLettersText, livesText, winsText;
@@ -67,6 +62,8 @@ window.onload = () => {
   livesText = document.getElementById('livesText');
   winsText = document.getElementById('winsText');
 
+  winsText.textContent = 'Wins: 0';
+
   // initialize the game
   initializeGame();
 };
@@ -105,6 +102,20 @@ const checkDictionary = letter => {
   return false; // returns false if the letter is not part of the dictionary
 };
 
+const checkWinCondition = () => {
+  console.log('checking win condition...');
+  // loop through each key in the dictionary
+  for (let i = 0; i < Object.values(dictionary).length; i++) {
+    // if there isnt a blank left in the dictionary
+    if (dictionary[i][1] !== ' _') {
+      // [NEED TO CHECK IF ALL IS A NOT A BLANK]
+      console.log('no more missing letters in currentWord');
+      // increment wins
+      // initializeGame();
+    }
+  }
+};
+
 /*
  *   @param e, the event
  *   function that handles what happens when the player presses a key
@@ -120,7 +131,6 @@ document.onkeyup = e => {
       checkDictionary(keyPressed)
     ) {
       console.log('case 1');
-
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
 
       // loop through each character form currentWord
@@ -136,8 +146,8 @@ document.onkeyup = e => {
           }
         }
       }
-
-      //   console.log(dictionary);
+      //   check win condition
+      checkWinCondition();
     }
 
     // kwhen the keyPressed wasn't already guessed AND keyPressed DOES NOT match a letter in the currentWord
@@ -170,24 +180,23 @@ document.onkeyup = e => {
 
 // function called when 'Restart Game' is pressed or when the webpage is loaded
 const initializeGame = () => {
-  console.log('GAME HAS RESTARTED');
+  console.log('GAME INITIALIZED');
   // initialize script variables
-  //   numberOfGuesses = 0; // counter for number of guesses
-  lives = 2; // counter for lives, used to determine how many chances the player has get before a gameover
+  lives = 3; // counter for lives, used to determine how many chances the player has get before a gameover
   guessedLetters = []; // array to keep track of each leter guessed
-  //   correctGuesses = []; // arra to store
   dictionary = {}; // initialize empty object
-  currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+  currentWord = wordBank[Math.floor(Math.random() * wordBank.length)]; // retrieve a random word from the wordBank
+
   console.log('currentWord:', currentWord);
 
   // update html elements
-  currentWordText.textContent = 'Current Word: '; // resets currentWordText
-  for (let i = 0; i < currentWord.length; i++) {
-    dictionary[i] = [currentWord.charAt(i), ' _']; // model like: [id]:['a',' _']
-    currentWordText.textContent += dictionary[i][1]; // updates text content
-  }
-  //   console.log(dictionary);
+  currentWordText.textContent = 'Current Word: ';
   guessedLettersText.textContent = 'Guessed Letters: ';
   livesText.textContent = 'Lives: 2';
-  winsText.textContent = 'Wins: 0';
+
+  // loop and create an object using characters from the currentWord
+  for (let i = 0; i < currentWord.length; i++) {
+    dictionary[i] = [currentWord.charAt(i), ' _']; // object like: [id]:['currentWord's letter',' _']
+    currentWordText.textContent += dictionary[i][1]; // updates text content with blanks
+  }
 };
