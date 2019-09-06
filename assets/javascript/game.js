@@ -1,5 +1,5 @@
 // counters used in script
-let lives, wins, currentWord, guessedLetters, dictionary;
+let lives, wins, currentWord, guessedLetters, dictionary, numberOfGuesses;
 
 // references to HTML elements
 let currentWordText, guessedLettersText, livesText, winsText;
@@ -62,6 +62,7 @@ window.onload = () => {
   livesText = document.getElementById('livesText');
   winsText = document.getElementById('winsText');
 
+  wins = 0;
   winsText.textContent = 'Wins: 0';
 
   // initialize the game
@@ -103,15 +104,18 @@ const checkDictionary = letter => {
 };
 
 const checkWinCondition = () => {
-  console.log('checking win condition...');
+  let word = ''; // model of the currentWord
+
   // loop through each key in the dictionary
   for (let i = 0; i < Object.values(dictionary).length; i++) {
-    // if there isnt a blank left in the dictionary
-    if (dictionary[i][1] !== ' _') {
-      // [NEED TO CHECK IF ALL IS A NOT A BLANK]
-      console.log('no more missing letters in currentWord');
-      // increment wins
-      // initializeGame();
+    // build the word using the dictionary
+    word += dictionary[i][1];
+
+    // if the currentWord equals the word
+    if (currentWord === word) {
+      wins++; // increment winds
+      winsText.textContent = 'Wins: ' + wins; // update text content
+      initializeGame(); // restart the game
     }
   }
 };
@@ -130,7 +134,7 @@ document.onkeyup = e => {
       !checkArrLetter(guessedLetters, keyPressed) &&
       checkDictionary(keyPressed)
     ) {
-      console.log('case 1');
+      console.log('case 1: letter guessed part of the word');
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
 
       // loop through each character form currentWord
@@ -146,7 +150,7 @@ document.onkeyup = e => {
           }
         }
       }
-      //   check win condition
+      // check win condition
       checkWinCondition();
     }
 
@@ -155,7 +159,7 @@ document.onkeyup = e => {
       !checkArrLetter(guessedLetters, keyPressed) &&
       !checkDictionary(keyPressed)
     ) {
-      console.log('case 2');
+      console.log('case 2: letter guessed not part of the word');
 
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
 
@@ -170,7 +174,7 @@ document.onkeyup = e => {
 
     // keyPressed already exist in guessedLetters
     else {
-      console.log('case 3');
+      console.log('case 3: duplicate guess');
       alert(
         'The letter has been guessed already. Try again with a different letter.'
       );
@@ -182,17 +186,18 @@ document.onkeyup = e => {
 const initializeGame = () => {
   console.log('GAME INITIALIZED');
   // initialize script variables
-  lives = 3; // counter for lives, used to determine how many chances the player has get before a gameover
+  lives = 5; // counter for lives, used to determine how many chances the player has get before a gameover
   guessedLetters = []; // array to keep track of each leter guessed
   dictionary = {}; // initialize empty object
   currentWord = wordBank[Math.floor(Math.random() * wordBank.length)]; // retrieve a random word from the wordBank
+  numberOfGuesses = 0;
 
   console.log('currentWord:', currentWord);
 
   // update html elements
   currentWordText.textContent = 'Current Word: ';
   guessedLettersText.textContent = 'Guessed Letters: ';
-  livesText.textContent = 'Lives: 2';
+  livesText.textContent = 'Lives: ' + lives;
 
   // loop and create an object using characters from the currentWord
   for (let i = 0; i < currentWord.length; i++) {
