@@ -4,6 +4,9 @@ let lives, wins, currentWord, guessedLetters, dictionary, numberOfGuesses;
 // references to HTML elements
 let currentWordText, guessedLettersText, livesText, winsText;
 
+// references to HTML sound elements
+let winSound, badGuessSound, loseSound;
+
 // array containing available words the player can guess
 const wordBank = [
   'moooooonkey',
@@ -62,6 +65,11 @@ window.onload = () => {
   livesText = document.getElementById('livesText');
   winsText = document.getElementById('winsText');
 
+  // get references to the html sound elements
+  winSound = document.getElementById('winSound');
+  badGuessSound = document.getElementById('badGuessSound');
+  loseSound = document.getElementById('loseSound');
+
   wins = 0;
   winsText.textContent = 'Wins: 0';
 
@@ -103,6 +111,10 @@ const checkDictionary = letter => {
   return false; // returns false if the letter is not part of the dictionary
 };
 
+/*
+ * function to check if the player has guessed all the letters of the
+ * currentWord by building a string using the dictionary
+ */
 const checkWinCondition = () => {
   let word = ''; // model of the currentWord
 
@@ -115,9 +127,14 @@ const checkWinCondition = () => {
     if (currentWord === word) {
       wins++; // increment winds
       winsText.textContent = 'Wins: ' + wins; // update text content
+      playAudio(winSound);
       initializeGame(); // restart the game
     }
   }
+};
+
+const playAudio = sample => {
+  sample.play();
 };
 
 /*
@@ -165,9 +182,11 @@ document.onkeyup = e => {
 
       lives--; // decrement lives
       livesText.textContent = 'Lives: ' + lives; // update livesText
+      playAudio(badGuessSound);
 
       // re-initializes the game if lives equals zero
       if (lives === 0) {
+        playAudio(loseSound);
         initializeGame();
       }
     }
