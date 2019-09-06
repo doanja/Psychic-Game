@@ -219,7 +219,7 @@ const gameOver = () => {
  *   function that handles what happens when the player presses a key
  */
 document.onkeyup = e => {
-  const keyPressed = e.key;
+  const keyPressed = e.key.toLowerCase();
 
   // checks to see if keyPressed is a valid letter in letterbank
   if (checkArrLetter(letterBank, keyPressed)) {
