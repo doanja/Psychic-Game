@@ -92,17 +92,17 @@ const updateGuessedLetters = letter => {
 /*
  * @param dictionary, the object to check
  * @param letter, the letter the function is checking for
- * function to check if letter exists in the dictionary
+ * function to check if letter exists in the dictionary (the currentWord)
  */
 const checkDictionary = letter => {
+  // loop through each key in the dictionary
   for (let i = 0; i < Object.values(dictionary).length; i++) {
-    if (dictionary[i][1] === letter) {
+    // if the value matches the letter
+    if (dictionary[i][0] === letter) {
       return true;
     }
-    return false;
-    // console.log('checkDictionary:', dictionary[i][1] === letter);
-    // return dictionary[i][1] === letter;
   }
+  return false; // returns false if the letter is not part of the dictionary
 };
 
 /*
@@ -120,7 +120,7 @@ document.onkeyup = e => {
       checkDictionary(keyPressed)
     ) {
       console.log('case 1');
-      //   console.log(keyPressed);
+
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
 
       // loop through each character form currentWord
@@ -140,17 +140,12 @@ document.onkeyup = e => {
       //   console.log(dictionary);
     }
 
-    // keyPressed already exist in guessedLetters
-    else if (checkArrLetter(guessedLetters, keyPressed)) {
+    // kwhen the keyPressed wasn't already guessed AND keyPressed DOES NOT match a letter in the currentWord
+    else if (
+      !checkArrLetter(guessedLetters, keyPressed) &&
+      !checkDictionary(keyPressed)
+    ) {
       console.log('case 2');
-      alert(
-        'The letter has been guessed already. Try again with a different letter.'
-      );
-    }
-
-    // keyPressed does not exist in guessedLetter AND keyPressed DOES NOT match a letter in the currentWord
-    else {
-      console.log('case 3');
 
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
 
@@ -161,6 +156,14 @@ document.onkeyup = e => {
       if (lives === 0) {
         initializeGame();
       }
+    }
+
+    // keyPressed already exist in guessedLetters
+    else {
+      console.log('case 3');
+      alert(
+        'The letter has been guessed already. Try again with a different letter.'
+      );
     }
   }
 };
