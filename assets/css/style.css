@@ -1,13 +1,29 @@
 body {
-  background-image: url('../images/ep_naturalblack.png');
+  background-image: url('../images/animal-icon-png-27.jpg');
+  background-repeat: repeat;
   min-height: 100vh;
 }
 
 .container {
   height: 75%;
   border-radius: 6px;
+  background-image: url('../images/ep_naturalblack.png');
 }
 
 img {
   width: 50%;
+}
+
+#healthBar {
+  position: relative;
+  border: 1px solid black;
+  background-color: white;
+  width: 50%;
+  height: 20px;
+}
+
+#healthBarInfill {
+  position: absolute;
+  background-color: red;
+  height: 100%;
 }

@@ -1,25 +1,49 @@
 // counters used in script
-let lives, wins, currentWord, guessedLetters, dictionary, numberOfGuesses;
+let lives, maxLives, wins, losts, currentWord, guessedLetters, dictionary;
 
 // references to HTML elements
-let currentWordText, guessedLettersText, livesText, winsText;
+let currentWordText,
+  guessedLettersText,
+  livesText,
+  winsText,
+  lostsText,
+  healthBarInfill;
 
 // references to HTML sound elements
 let winSound, badGuessSound, loseSound;
 
 // array containing available words the player can guess
 const wordBank = [
-  'moooooonkey',
-  'beeear',
-  'eleeeephant',
+  'lion',
+  'elephant',
+  'giraffe',
+  'tiger',
+  'monkey',
+  'bear',
+  'panda',
   'gorilla',
-  'dog',
-  'cat',
-  'cow',
-  'pig',
-  'goat',
-  'horse',
-  'dinosaur'
+  'lemur',
+  'rhinoceros',
+  'penguin',
+  'hippopotamus',
+  'otter',
+  'leopard',
+  'sloth',
+  'kangaroo',
+  'zebra',
+  'orangutan',
+  'koala',
+  'meerkat',
+  'crocodile',
+  'camel',
+  'capybara',
+  'peacock',
+  'emu',
+  'chimpanzee',
+  'aligator',
+  'snake',
+  'turtle',
+  'flammingo'
 ];
 
 // array containing every lowercase letter in the English alphabet
@@ -64,14 +88,19 @@ window.onload = () => {
   guessedLettersText = document.getElementById('guessedLettersText');
   livesText = document.getElementById('livesText');
   winsText = document.getElementById('winsText');
+  lostsText = document.getElementById('lostsText');
 
   // get references to the html sound elements
   winSound = document.getElementById('winSound');
   badGuessSound = document.getElementById('badGuessSound');
   loseSound = document.getElementById('loseSound');
 
+  healthBarInfill = document.getElementById('healthBarInfill');
+
   wins = 0;
   winsText.textContent = 'Wins: 0';
+  losts = 0;
+  lostsText.textContent = 'Losts: 0';
 
   // initialize the game
   initializeGame();
@@ -84,15 +113,6 @@ window.onload = () => {
  */
 const checkArrLetter = (arr, letter) => {
   return arr.includes(letter);
-};
-
-/*
- * @param letter, the letter the function is checking for
- * function to update guessedLetters model and view
- */
-const updateGuessedLetters = letter => {
-  guessedLetters.push(letter); // add to guessedLetters
-  guessedLettersText.textContent += letter + ' '; // update guessedLettersText with keyPressed
 };
 
 /*
@@ -109,6 +129,35 @@ const checkDictionary = letter => {
     }
   }
   return false; // returns false if the letter is not part of the dictionary
+};
+
+/*
+ * @param letter, the letter the function is checking for
+ * function to update guessedLetters model and view
+ */
+const updateGuessedLetters = letter => {
+  guessedLetters.push(letter); // add to guessedLetters
+  guessedLettersText.textContent += letter + ' '; // update guessedLettersText with keyPressed
+};
+
+/*
+ * @param key, the letter the player guessed
+ * function to handle what happens when the player guesses the right letter
+ */
+const onRightGuess = key => {
+  // loop through each character form currentWord
+  for (let i = 0; i < currentWord.length; i++) {
+    // if the keyPressed matches one of the letters from the currentWord
+    if (dictionary[i][0] === key) {
+      dictionary[i][1] = key; // set the second value of the key from ' _' to keyPressed
+      currentWordText.textContent = 'Current Word: '; // clears currentWordText
+
+      // loop through each character of currentWord
+      for (let j = 0; j < currentWord.length; j++) {
+        currentWordText.textContent += dictionary[j][1]; // update the currentWordText with the keyPressed
+      }
+    }
+  }
 };
 
 /*
@@ -133,8 +182,36 @@ const checkWinCondition = () => {
   }
 };
 
+// function used to handle what happens when the player guesses the wrong character
+const onWrongGuess = () => {
+  lives--; // decrement lives
+  livesText.textContent = 'Lives: ' + lives; // update livesText
+  playAudio(badGuessSound); // plays sound
+  updateHealthBar(lives); // update healthbar
+};
+
+/*
+ * @param sample, the sound sample to be played
+ * function to play a sound sample
+ */
 const playAudio = sample => {
   sample.play();
+};
+
+/*
+ * @param num, number of current lives
+ * function used to calculate and update healthBarInfill
+ */
+const updateHealthBar = num => {
+  healthBarInfill.style.width = (num / maxLives) * 100 + '%';
+};
+
+// function used to update counters when player runs out of lives
+const gameOver = () => {
+  losts++; // increment losts
+  lostsText.textContent = 'Losts: ' + losts; // updates lostsText
+  playAudio(loseSound);
+  initializeGame();
 };
 
 /*
@@ -151,22 +228,9 @@ document.onkeyup = e => {
       !checkArrLetter(guessedLetters, keyPressed) &&
       checkDictionary(keyPressed)
     ) {
-      console.log('case 1: letter guessed part of the word');
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
+      onRightGuess(keyPressed); // player made the right guess
 
-      // loop through each character form currentWord
-      for (let i = 0; i < currentWord.length; i++) {
-        // if the keyPressed matches one of the letters from the currentWord
-        if (dictionary[i][0] === keyPressed) {
-          dictionary[i][1] = keyPressed; // set the second value of the key from ' _' to keyPressed
-          currentWordText.textContent = 'Current Word: '; // clears currentWordText
-
-          // loop through each character of currentWord
-          for (let j = 0; j < currentWord.length; j++) {
-            currentWordText.textContent += dictionary[j][1]; // update the currentWordText with the keyPressed
-          }
-        }
-      }
       // check win condition
       checkWinCondition();
     }
@@ -176,24 +240,17 @@ document.onkeyup = e => {
       !checkArrLetter(guessedLetters, keyPressed) &&
       !checkDictionary(keyPressed)
     ) {
-      console.log('case 2: letter guessed not part of the word');
-
       updateGuessedLetters(keyPressed); // add the guessed letter to the array
+      onWrongGuess(); // player made a wrong guess
 
-      lives--; // decrement lives
-      livesText.textContent = 'Lives: ' + lives; // update livesText
-      playAudio(badGuessSound);
-
-      // re-initializes the game if lives equals zero
+      // if the player runs out of lives, call gameOver
       if (lives === 0) {
-        playAudio(loseSound);
-        initializeGame();
+        gameOver();
       }
     }
 
     // keyPressed already exist in guessedLetters
     else {
-      console.log('case 3: duplicate guess');
       alert(
         'The letter has been guessed already. Try again with a different letter.'
       );
@@ -203,13 +260,15 @@ document.onkeyup = e => {
 
 // function called when 'Restart Game' is pressed or when the webpage is loaded
 const initializeGame = () => {
-  console.log('GAME INITIALIZED');
   // initialize script variables
-  lives = 5; // counter for lives, used to determine how many chances the player has get before a gameover
+  maxLives = 9;
+  lives = maxLives; // counter for lives, used to determine how many chances the player has get before a gameover
   guessedLetters = []; // array to keep track of each leter guessed
   dictionary = {}; // initialize empty object
   currentWord = wordBank[Math.floor(Math.random() * wordBank.length)]; // retrieve a random word from the wordBank
   numberOfGuesses = 0;
+
+  healthBarInfill.style.width = Math.floor(lives / maxLives) * 100 + '%';
 
   console.log('currentWord:', currentWord);
 

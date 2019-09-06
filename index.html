@@ -9,24 +9,37 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <title>Hangman</title>
+    <title>Animal Hangman</title>
 </head>
 
 <body>
-    <div class="container bg-light mt-5 p-5">
-        <h1 class="text-center">Hangman</h1>
+    <div class="container mt-5 p-5">
+        <h1 class="text-center text-light">Animal Hangman</h1>
+
         <hr>
         <div class="alert alert-success">Press any key to get started!</div>
         <div class="row">
             <div class="col-sm-12 col-md-6">
-                <img src="https://lh3.googleusercontent.com/Jx2nAZ3cmGYoqr-oM7_FBCqWT3tCBHIR5GFhMXc5Lsz_uPa9APeVsBS3A-mH_HuHOy4dkCwNIH5AB1l5RN8bGhOxizQXlhJRShX7stMVrgUrvwuPtdVD8D1X-42XZBBAFOMsM8hYDITe1-a2nGVECVO43nu8PDE7WAOxkz0mmvibh37vlcv3unZTB6y4JkTz6LkqPSs1P1SVoOIswkY7kXJY0rL_4oxoThbPGCI5hTqZhkUCpi3mwQEFBWCf_oBrDCHOmlhVcSw61HnCloKCEHzhRZ0IJ9tGtk7BgDo-UFId9DrWDfMpzOZTqVhHAUUzFC9Qy5WyEd1yWJVHn8F4Q_Ehse0hcQlm6PcVijgYjlbid_ZgkudplEs2Kz1IlWa1kAvx3uz-w6-lubmHm68An8u4ZCv5sykhVdhNjjkwUYEVp_ZnuTRljssn4nwHTdTlziRxBRBYzB3QYo9nsjs2EXGCUI0dFKBte_SOQetcYk4J5DDaGME9dj-L2HN_Ppa7YaoIZnrZjSJAATVHPWG_9S3d-yEBeKBM329iB9FuIfcjKjdsTNstIO6EKS-FCpEebb3ndoxXaE3R8kYns0zp4SwuaRf5ZmzHH7lt5O9siPMv7ao1cxLuGrzLJyYlUjfA4H2N8GjNgugykuRCDeRNz7ARdsVS5b_kqrcY4ztaIk3_HdzIKkWeseI=w938-h969-no"
-                    alt="hangman">
+                <div class="card align-item-center p-2">
+                    <img src="./assets/images/Screenshot_20190903-221547.png" alt="hangman">
+                    <div id="healthBar">
+                        <div id="healthBarInfill"></div>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-6 pt-4">
                 <div id="currentWordText" class="alert alert-dark"></div>
                 <div id="guessedLettersText" class="alert alert-warning"></div>
                 <div id="livesText" class="alert alert-danger"></div>
-                <div id="winsText" class="alert alert-primary"></div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div id="winsText" class="alert alert-primary"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="lostsText" class="alert alert-secondary"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <hr>
